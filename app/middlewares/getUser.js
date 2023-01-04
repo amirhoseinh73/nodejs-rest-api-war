@@ -12,7 +12,7 @@ const getUser = async ( req, res, next ) => {
     res.json( respER( 500, err ) )
   }
 
-  res.getUser = user
+  res.user = user
   next()
 }
 

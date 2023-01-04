@@ -1,7 +1,7 @@
 GET http://localhost:4000/users
 
 ###
-GET http://localhost:4000/users/63b4284c021c74d8a5be3461
+GET http://localhost:4000/users/63b52c7a4f3028c6dad256b4
 
 ###
 POST http://localhost:4000/users
@@ -10,18 +10,19 @@ Content-Type: application/json
 {
   "firstname": "amirhosein",
   "lastname" : "hasani",
-  "username" : "amirhoseinhhhhhh73",
+  "username" : "amirhoseinh73",
   "mobile"  : "09376885515",
   "password" : "123456"
 }
 
 ###
-DELETE http://localhost:4000/users/12
+DELETE http://localhost:4000/users/63b53c6d38e0ce2aa62f8e3d
 
 ###
-PATCH http://localhost:4000/users/12
+PATCH http://localhost:4000/users/63b52c7a4f3028c6dad256b4
 Content-Type: application/json
 
 {
-  "firstname": "amir",
+  "firstname": "amirhossein",
+  "username": "aa"
 }
