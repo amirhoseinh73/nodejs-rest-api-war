@@ -1,6 +1,6 @@
 import { Messages } from "../helpers/messages.js"
 import { respER, respSC } from "../middlewares/response.js"
-import User from "../models/user.js"
+import User from "../models/userModel.js"
 
 const userController = {
   list: async ( req, res ) => {

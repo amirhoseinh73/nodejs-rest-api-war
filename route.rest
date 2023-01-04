@@ -23,6 +23,5 @@ PATCH http://localhost:4000/users/63b52c7a4f3028c6dad256b4
 Content-Type: application/json
 
 {
-  "firstname": "amirhossein",
-  "username": "aa"
+  "firstname": "amirhossein"
 }

@@ -1,5 +1,5 @@
 import { Messages } from "../helpers/messages.js"
-import User from "../models/user.js"
+import User from "../models/userModel.js"
 import { respER } from "./response.js"
 
 const getUser = async ( req, res, next ) => {
