@@ -1,50 +1,27 @@
 import { router } from "../config.js"
+import { Messages } from "../helpers/messages.js"
+import getUser from "../middlewares/getUser.js"
+import { respER, respSC } from "../middlewares/response.js"
 import User from "../models/user.js"
-
-
-const getUser = async ( req, res, next ) => {
-  let user
-
-  try {
-    user = await User.findById( req.params.id )
-    if ( ! user ) return res.status( 404 ).json( {
-      message: "user not found!"
-    } )
-  } catch( err ) {
-    if ( err instanceof Error ) {
-      res.status( 500 ).json( {
-        message: err.message
-      } )
-    } else {
-      res.status( 500 ).json( err )
-    }
-  }
-
-  res.user = user
-  next()
-}
-
 
 // get all users
 router.get("/", async ( req, res ) => {
   try {
     const users = await User.find()
-    res.json( users )
+    res.json( respSC( users ) )
   } catch( err ) {
-    if ( err instanceof Error ) {
-      res.status( 500 ).json( {
-        message: err.message
-      } )
-    } else {
-      res.status( 500 ).json( err )
-    }
+    res.json( respER( 500, err ) )
   }
 })
 
 // get user
-router.get("/:id", getUser, ( req, res ) => {
-  res.send( res.user.firstname )
-  res.json( res.user )
+router.get("/:id", getUser, async ( req, res ) => {
+  try {
+    const user = await res.user
+    res.json( respSC( user ) )
+  } catch( err ) {
+    res.json( respER( 404, err ) )
+  }
 })
 
 // create user
@@ -59,15 +36,9 @@ router.post("/", async ( req, res ) => {
 
   try {
     const newUser = await user.save()
-    res.status( 201 ).json( newUser )
+    res.json( respSC( newUser, 201, Messages.itemCreated.replace( ":item", "user" ) ) )
   } catch( err ) {
-    if ( err instanceof Error ) {
-      res.status( 400 ).json( {
-        message: err.message
-      } )
-    } else {
-      res.status( 400 ).json( err )
-    }
+    res.json( respER( 400, err ) )
   }
 })
 
@@ -80,15 +51,9 @@ router.patch("/", getUser, async ( req, res ) => {
 
   try {
     const updatedUser = await res.user.save()
-    res.json( updatedUser )
+    res.json( respSC( updatedUser, 200, Messages.itemUpdated.replace( ":item", "user" ) ) )
   } catch( err ) {
-    if ( err instanceof Error ) {
-      res.status( 400 ).json( {
-        message: err.message
-      } )
-    } else {
-      res.status( 400 ).json( err )
-    }
+    res.json( respER( 400, err ) )
   }
 })
 
@@ -96,17 +61,9 @@ router.patch("/", getUser, async ( req, res ) => {
 router.delete("/:id", getUser, async ( req, res ) => {
   try {
     await res.user.remove()
-    res.json( {
-      message: "user deleted!"
-    } )
+    res.json( respSC( [], 200, Messages.itemDeleted.replace( ":item", "user" ) ) )
   } catch( err ) {
-    if ( err instanceof Error ) {
-      res.status( 500 ).json( {
-        message: err.message
-      } )
-    } else {
-      res.status( 500 ).json( err )
-    }
+    res.json( respER( 500, err ) )
   }
 })
 

@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
 import express from "express"
 
+dotenv.config()
+
 export const app = express()
 
 export const router = express.Router()
 
-dotenv.config()
+export const PORT = 4000

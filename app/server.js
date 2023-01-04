@@ -1,7 +1,7 @@
-import { app } from './config.js';
+import { app, PORT } from './config.js';
 import { dbConnection } from './DB.js';
 import "./routes/routes.js"
 
 dbConnection()
 
-app.listen( 4000, () => console.log( "server started 4000" ) )
+app.listen( PORT, () => console.log( `server started ${PORT}` ) )
