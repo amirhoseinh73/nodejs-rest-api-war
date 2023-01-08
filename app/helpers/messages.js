@@ -5,5 +5,7 @@ export const Messages = {
   itemNotFound: ":item not found.",
   itemCreated: ":item created successfully.",
   itemDeleted: ":item deleted successfully.",
-  itemUpdated: ":item updated successfully."
+  itemUpdated: ":item updated successfully.",
+
+  passwordNotVerified: "Password should be at least 6 characters.",
 }
