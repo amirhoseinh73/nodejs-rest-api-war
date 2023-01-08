@@ -8,4 +8,5 @@ export const Messages = {
   itemUpdated: ":item updated successfully.",
 
   passwordNotVerified: "Password should be at least 6 characters.",
+  passwordChanged: "Password change successfully.",
 }

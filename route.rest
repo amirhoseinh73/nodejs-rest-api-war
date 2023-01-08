@@ -1,10 +1,10 @@
-GET http://localhost:4000/users
+GET http://localhost:4000/users/list
 
 ###
-GET http://localhost:4000/users/63b57e6d2c0e9b70cdecf196
+GET http://localhost:4000/users/info/63b57e6d2c0e9b70cdecf196
 
 ###
-POST http://localhost:4000/users
+POST http://localhost:4000/users/register
 Content-Type: application/json
 
 {
@@ -28,9 +28,28 @@ Content-Type: application/json
 DELETE http://localhost:4000/users/63b53c6d38e0ce2aa62f8e3d
 
 ###
-PATCH http://localhost:4000/users/63b57e6d2c0e9b70cdecf196
+PATCH http://localhost:4000/users/info/63b57e6d2c0e9b70cdecf196
 Content-Type: application/json
 
 {
   "firstname": "amirhossein"
 }
+
+###
+PATCH http://localhost:4000/users/change-password
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3ZTZkMmMwZTliNzBjZGVjZjE5NiIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3MzE2OTMxMCwiZXhwIjoxNjczMTY5NDEwfQ.n_-g4Ub3rndvVQYpIcClKpVo8qvx_F3jtH2OJ--gUvY
+
+{
+  "password" : "123456"
+}
+
+###
+GET http://localhost:4000/users/info
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3ZTZkMmMwZTliNzBjZGVjZjE5NiIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3MzE3MDI2NCwiZXhwIjoxNjczMjU2NjY0fQ.tsuinI7pUg3sxJ6pJcIBbcrEt7jwmfeDvlQNzUgZ0FA
+
+###
+GET http://localhost:4000/users/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3ZTZkMmMwZTliNzBjZGVjZjE5NiIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3MzE3MDI2NCwiZXhwIjoxNjczMjU2NjY0fQ.tsuinI7pUg3sxJ6pJcIBbcrEt7jwmfeDvlQNzUgZ0FA

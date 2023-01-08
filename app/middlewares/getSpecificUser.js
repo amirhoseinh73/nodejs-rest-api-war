@@ -4,7 +4,7 @@ import { respER } from "./response.js"
 
 const getSpecificUser = async ( req, res, next ) => {
   let user
-  let statusCode = 200
+  let statusCode = 500
 
   try {
     user = await User.findById( req.params.id )
@@ -13,8 +13,7 @@ const getSpecificUser = async ( req, res, next ) => {
       return res.status( statusCode ).json( respER( statusCode, Messages.itemNotFound.replace( ":item", "user" ) ) )
     }
   } catch( err ) {
-    statusCode = 500
-    res.status( statusCode ).json( respER( statusCode, err ) )
+    return res.status( statusCode ).json( respER( statusCode, err ) )
   }
 
   res.user = user
