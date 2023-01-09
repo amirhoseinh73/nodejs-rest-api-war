@@ -1,4 +1,9 @@
+import { APP_PORT } from "../config.js";
+
 export const Messages = {
+  connectedDB: "Database Connected.",
+  serverRuning: `server started ${APP_PORT}...`,
+
   success: "Operation Complete!",
   failed: "Operation Failed!",
 

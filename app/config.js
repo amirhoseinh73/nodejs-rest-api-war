@@ -9,9 +9,11 @@ export const app = express()
 
 export const router = express.Router()
 
-export const PORT = 4000
+export const APP_PORT = process.env.APP_PORT || 3000
 
-export const JWT_SECRET = "!@#$%^&*()_+="
+export const DB_URL = process.env.DB_URL || ""
+
+export const JWT_SECRET = process.env.JWT_SECRET || ""
 
 export const jwt_blacklist = []
 
