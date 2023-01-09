@@ -44,7 +44,7 @@ const userController = {
     })
 
     if ( user.password.length < 6 ) {
-      statusCode = 406
+      statusCode = 406 // not acceptable
       return res.status( statusCode ).json( respER( statusCode, Messages.passwordNotVerified ) )
     }
   
@@ -68,7 +68,7 @@ const userController = {
     try {
       if ( req.body.password ) {
         if ( req.body.password.length < 6 ) {
-          statusCode = 406
+          statusCode = 406 // not acceptable
           return res.status( statusCode ).json( respER( statusCode, Messages.passwordNotVerified ) )
         }
         res.user.password = await bcryptjs.hash(req.body.password, 10)
@@ -150,7 +150,7 @@ const userController = {
       const userInfo = jwt.verify( token[1], JWT_SECRET )
 
       if ( req.body.password.length < 6 ) {
-        statusCode = 406
+        statusCode = 406 // not acceptable
         return res.status( statusCode ).json( respER( statusCode, Messages.passwordNotVerified ) )
       }
 

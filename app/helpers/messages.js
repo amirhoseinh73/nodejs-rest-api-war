@@ -9,4 +9,7 @@ export const Messages = {
 
   passwordNotVerified: "Password should be at least 6 characters.",
   passwordChanged: "Password change successfully.",
+
+  pathDuplicate: "Project Name already exists, please choose another name.",
+  pathCreateFailed: "Sorry! project paths can not be created. please try again later.",
 }

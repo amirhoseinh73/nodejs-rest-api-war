@@ -16,18 +16,18 @@ router.patch("/change-password", isAuth, userController.changePass)
 // change password
 router.all("/logout", isAuth, userController.logout)
 
+router.get("/info", isAuth, userController.info)
+
 // get all users
 router.get("/list", isAuth, isAdmin, userController.list)
 
-router.get("/info", isAuth, userController.info)
-
 // get user
-router.get("/info/:id", isAuth, getSpecificUser, userController.findOne)
+router.get("/:id", isAuth, isAdmin, getSpecificUser, userController.findOne)
 
 // update user
 // patch only update passed information to request
 // put update all information of user instead of the information passed
-router.patch("/info/:id", isAuth, getSpecificUser, userController.update)
+router.patch("/:id", isAuth, getSpecificUser, userController.update)
 
 // delete user
 router.delete("/:id", isAuth, isAdmin, getSpecificUser, userController.delete)
