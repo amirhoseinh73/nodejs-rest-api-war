@@ -4,37 +4,10 @@ import { respER, respSC } from "../middlewares/response.js"
 import User from "../models/userModel.js"
 import jwt from "jsonwebtoken"
 import { jwt_blacklist, JWT_SECRET } from "../config.js"
+import { HandledRespError } from "../helpers/errorThrow.js"
 
 const userController = {
-  list: async function( req, res ) {
-    let statusCode = 200
-    try {
-      const users = await User.find()
-      return res.status( statusCode ).json( respSC( users, statusCode ) )
-    } catch( err ) {
-      statusCode = 500
-      return res.status( statusCode ).json( respER( statusCode, err ) )
-    }
-  },
-
-  findOne: async function( req, res ) {
-    let statusCode = 200
-    try {
-      const user = await res.user
-
-      if ( ! user ) {
-        statusCode = 404
-        return res.status( statusCode ).json( respER( statusCode, Messages.itemNotFound.replace( ":item", "user" ) ) )
-      }
-      return res.status( statusCode ).json( respSC( user ) )
-    } catch( err ) {
-      statusCode = 404
-      return res.status( statusCode ).json( respER( statusCode, err ) )
-    }
-  },
-
-  create: async function( req, res ) {
-    let statusCode = 201
+  register: async function( req, res ) {
     const user = new User({
       firstname: req.body.firstname,
       lastname: req.body.lastname,
@@ -42,194 +15,130 @@ const userController = {
       mobile: req.body.mobile,
       password: req.body.password
     })
-
-    if ( user.password.length < 6 ) {
-      statusCode = 406 // not acceptable
-      return res.status( statusCode ).json( respER( statusCode, Messages.passwordNotVerified ) )
-    }
   
     try {
-      user.password = await bcryptjs.hash( user.password, 10 )
-      const newUser = await user.save()
-      statusCode = 201
-      return res.status( statusCode ).json( respSC( newUser, statusCode, Messages.itemCreated.replace( ":item", "user" ) ) )
-    } catch( err ) {
-      statusCode = 400
-      return res.status( statusCode ).json( respER( statusCode, err ) )
-    }
-  },
+      if (user.password.length < 6) throw new HandledRespError(406, Messages.passwordNotVerified)
 
-  update: async function( req, res ) {
-    let statusCode = 200
-    if ( req.body.firstname ) res.user.firstname = req.body.firstname
-    if ( req.body.lastname ) res.user.lastname = req.body.lastname
-    if ( req.body.mobile ) res.user.mobile = req.body.mobile
-  
-    try {
-      if ( req.body.password ) {
-        if ( req.body.password.length < 6 ) {
-          statusCode = 406 // not acceptable
-          return res.status( statusCode ).json( respER( statusCode, Messages.passwordNotVerified ) )
-        }
-        res.user.password = await bcryptjs.hash(req.body.password, 10)
+      let newUser
+      try {
+        user.password = await bcryptjs.hash( user.password, 10 )
+        newUser = await user.save()
+      } catch {
+        throw new HandledRespError(400)
       }
-
-      const updatedUser = await res.user.save()
-      return res.status( statusCode ).json( respSC( updatedUser, statusCode, Messages.itemUpdated.replace( ":item", "user" ) ) )
+      
+      return res.status(201).json(respSC(newUser, 201, Messages.itemCreated.replace(":item", "user")))
     } catch( err ) {
-      statusCode = 400
-      return res.status( statusCode ).json( respER( statusCode, err ) )
-    }
-  },
-
-  delete: async function( req, res ) {
-    let statusCode = 200
-    try {
-      const user = await res.user
-      if ( ! user ) {
-        statusCode = 404
-        return res.status( statusCode ).json( respER( statusCode, Messages.itemNotFound.replace( ":item", "user" ) ) )
-      }
-      await user.remove()
-      return res.status( statusCode ).json( respSC( [], statusCode, Messages.itemDeleted.replace( ":item", "user" ) ) )
-    } catch( err ) {
-      statusCode = 500
-      return res.status( statusCode ).json( respER( statusCode, err ) )
+      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
     }
   },
 
   login: async function( req, res ) {
-    let statusCode = 200
-
     const username = req.body.username
     const password = req.body.password
 
     try {
-      const user = await User.findOne( {username} ).lean()
-      if ( ! user ) {
-        statusCode = 404
-        return res.status( statusCode ).json( respER( statusCode, Messages.itemNotFound.replace( ":item", "user" ) ) )
-      }
+      const user = await User.findOne({username}).lean()
+      if ( ! user ) throw new HandledRespError(404, Messages.itemNotFound.replace( ":item", "user" ))
 
-      if ( ! await bcryptjs.compare( password, user.password ) ) {
-        statusCode = 404
-        return res.status( statusCode ).json( respER( statusCode, Messages.itemNotFound.replace( ":item", "user" ) ) )
-      }
+      if ( ! await bcryptjs.compare( password, user.password ) ) throw new HandledRespError(404, Messages.itemNotFound.replace( ":item", "user" ))
 
       const token = jwt.sign({
         id: user._id,
         username: user.username
-      }, JWT_SECRET, {
-        expiresIn: "1d"
-      })
+      }, JWT_SECRET, {expiresIn: "1d"})
 
-      return res.status( statusCode ).json( respSC( token ) )
+      return res.status(200).json(respSC(token))
     } catch( err ) {
-      statusCode = 500
-      return res.status( statusCode ).json( respER( statusCode, err ) )
-    }
-  },
-
-  changePass: async function( req, res ) {
-    let statusCode = 200
-
-    let token = req.headers.authorization
-
-    if ( ! token ) {
-      statusCode = 401
-      return res.status(statusCode).json( respER(statusCode, "User Unauthorized!") )
-    }
-
-    token = token.split( "Bearer " )
-    if ( token.length !== 2 ) {
-      statusCode = 401
-      return res.status(statusCode).json( respER(statusCode, "User Unauthorized!") )
-    }
-
-    try {
-      const userInfo = jwt.verify( token[1], JWT_SECRET )
-
-      if ( req.body.password.length < 6 ) {
-        statusCode = 406 // not acceptable
-        return res.status( statusCode ).json( respER( statusCode, Messages.passwordNotVerified ) )
-      }
-
-      const newPassword = await bcryptjs.hash(req.body.password, 10)
-
-      await User.updateOne(
-        {_id: userInfo.id},
-        {
-          $set: {password: newPassword}
-        }
-      )
-
-      return res.status( statusCode ).json( respSC( [], statusCode, Messages.passwordChanged ) )
-    } catch( err ) {
-      statusCode = 401
-      return res.status(statusCode).json( respER(statusCode, "User Unauthorized!") )
-    }
-  },
-
-  info: async function( req, res ) {
-    let statusCode = 200
-
-    try {
-      const userInfo = await userController.getInfo( req, res )
-
-      if ( ! userInfo ) {
-        statusCode = 401
-        return res.status(statusCode).json( respER(statusCode, "User Unauthorized!") )
-      }
-      
-      return res.status( statusCode ).json( respSC( userInfo.userInfo, statusCode, Messages.success ) )
-    } catch( err ) {
-      statusCode = 401
-      return res.status(statusCode).json( respER(statusCode, "User Unauthorized!") )
+      return res.status(500).json(respER(statusCode, err))
     }
   },
 
   logout: async function( req, res ) {
-    let statusCode = 200
-
     try {
-      const userInfo = await userController.getInfo( req, res )
-
-      if ( ! userInfo ) {
-        statusCode = 401
-        return res.status(statusCode).json( respER(statusCode, "User Unauthorized!") )
-      }
+      const userInfo = await res.userInfo
 
       jwt_blacklist.push(userInfo.token)
       
-      return res.status( statusCode ).json( respSC( [], statusCode, Messages.success ) )
+      return res.status(200).json(respSC([]) )
     } catch( err ) {
-      statusCode = 401
-      return res.status(statusCode).json( respER(statusCode, "User Unauthorized!") )
+      return res.status(500).json(respER())
     }
   },
 
-  getInfo: async function( req, res ) {
-
-    let token = req.headers.authorization
-
-    if ( ! token ) return false
-
-    token = token.split( "Bearer " )
-    if ( token.length !== 2 ) return false
-    token = token[1]
-
-    if ( jwt_blacklist.includes(token) ) return false
-
+  list: async function( req, res ) {
     try {
-      const userVerified = jwt.verify( token, JWT_SECRET )
-
-      const userInfo = await User.findById(userVerified.id).lean()
-      
-      return {userInfo, token}
+      const users = await User.find()
+      return res.status(200).json(respSC(users))
     } catch( err ) {
-      return false
+      return res.status(500).json(respER(500, err))
     }
-  }
+  },
+
+  info: async function( req, res ) {
+    try {
+      const userInfo = await res.userInfo
+
+      return res.status(200).json(respSC(userInfo))
+    } catch( err ) {
+      return res.status(500).json(respER())
+    }
+  },
+
+  changePass: async function( req, res ) {
+    try {
+      const userInfo = res.userInfo
+
+      if (userInfo.password.length < 6) throw new HandledRespError(406, Messages.passwordNotVerified)
+
+      try {
+        userInfo.password = await bcryptjs.hash( user.password, 10 )
+        await userInfo.save()
+      } catch {
+        throw new HandledRespError(400)
+      }
+
+      return res.status(200).json(respSC(userInfo, 200, Messages.passwordChanged))
+    } catch(err) {
+      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+    }
+  },
+
+  update: async function( req, res ) {  
+    try {
+      const userInfo = await res.userInfo
+      const body = req.body
+      if ( body.firstname ) userInfo.firstname = body.firstname
+      if ( body.lastname ) userInfo.lastname = body.lastname
+      if ( body.mobile ) userInfo.mobile = body.mobile
+
+      try {
+        await userInfo.save()
+      } catch {
+        throw new HandledRespError()
+      }
+
+      return res.status(200).json(respSC(userInfo, 200, Messages.itemUpdated.replace( ":item", "user" )))
+    } catch( err ) {
+      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+    }
+  },
+
+  delete: async function( req, res ) {
+    try {
+      const userInfo = await res.userInfo
+      
+      try {
+        await userInfo.remove()
+      } catch {
+        throw new HandledRespError(500)
+      }
+      
+      return res.status(200).json(respSC([],200, Messages.itemDeleted.replace( ":item", "user")))
+    } catch( err ) {
+      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+    }
+  },
 }
 
 export default userController
