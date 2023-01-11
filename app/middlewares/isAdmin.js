@@ -1,15 +1,15 @@
-import User from "../models/userModel.js"
+import { HandledRespError } from "../helpers/errorThrow.js"
 import { respER } from "./response.js"
 
 const isAdmin = async ( req, res, next ) => {
-  // try {
-  //   const user = await User.where()
-  //   if ( ! user ) return res.json( respER( 404, Messages.itemNotFound.replace( ":item", "user" ) ) )
-  // } catch( err ) {
-  //   res.json( respER( 500, err ) )
-  // }
+  try {
+    const userInfo = await res.userInfo
+    if ( ! userInfo.is_admin ) throw new HandledRespError(401)
 
-  next()
+    next()
+  } catch( err ) {
+    return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+  }
 }
 
 export default isAdmin

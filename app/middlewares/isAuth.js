@@ -1,21 +1,28 @@
-import userController from "../controllers/userController.js"
+import { HandledRespError } from "../helpers/errorThrow.js"
 import { respER } from "./response.js"
 
 const isAuth = async ( req, res, next ) => {
-  let statusCode = 500
+  const authorization = req.headers.authorization
+
   try {
-    const userInfo = await userController.getInfo( req, res )
+    if ( ! authorization ) throw new HandledRespError(401, Messages.userUnauth)
 
-    if ( ! userInfo ) {
-      statusCode = 401
-      return res.status(statusCode).json( respER(statusCode, "User Unauthorized!") )
-    }
+    let token = authorization.split( "Bearer " )
+    if ( token.length !== 2 ) throw new HandledRespError(401, Messages.userUnauth)
+    token = token[1]
 
+    if ( jwt_blacklist.includes(token) ) throw new HandledRespError(401, Messages.userUnauth)
+
+    const userVerified = jwt.verify( token, JWT_SECRET )
+
+    const userInfo = await User.findById(userVerified.id).lean()
+    if ( ! userInfo ) throw new HandledRespError(401, Messages.userUnauth)
+
+    userInfo.token = token
     res.userInfo = userInfo.userInfo
     next()
   } catch( err ) {
-    statusCode = 401
-    return res.status(statusCode).json( respER(statusCode, "User Unauthorized!") )
+    return res.status(err.statusCode).json(respER(err.statusCode, err.message))
   }
 }
 

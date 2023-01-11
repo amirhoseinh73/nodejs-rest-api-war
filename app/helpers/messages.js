@@ -7,6 +7,10 @@ export const Messages = {
   success: "Operation Complete!",
   failed: "Operation Failed!",
 
+  noData: "not found any data.",
+
+  userUnauth: "User Unauthorized!",
+
   itemNotFound: ":item not found.",
   itemCreated: ":item created successfully.",
   itemDeleted: ":item deleted successfully.",
