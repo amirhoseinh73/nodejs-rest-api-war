@@ -1,9 +1,10 @@
 import path from "path"
-import { __dir_projects, __dir_scene_data_, __subdir_projects } from "../config.js"
+import { __dir_projects__, __scene_data_file_name_, __subdir_projects__ } from "../config.js"
 import { promises as fsPromises } from "fs";
 import fs from "fs";
+import { HandledRespError } from "./errorThrow.js";
 
-export const createScenePaths = (userDIR, pathDIR) => {
+const createScenePaths = (userDIR, pathDIR) => {
   let flag = false
 
   // create user path by id
@@ -11,7 +12,7 @@ export const createScenePaths = (userDIR, pathDIR) => {
 
   fs.mkdir(pathDIR, err => flag = err)
 
-  Object.values(__subdir_projects).forEach( dir => {
+  Object.values(__subdir_projects__).forEach( dir => {
     if (flag) return
     const subDIR = path.join( pathDIR, dir )
 
@@ -22,19 +23,39 @@ export const createScenePaths = (userDIR, pathDIR) => {
   return true
 }
 
-export const createUserScenePaths = (pathName, userID) => {
-  const userDIR = path.join(`${__dir_projects}/${userID}`)
-  const pathDIR = path.join(`${__dir_projects}/${userID}/${pathName}`)
+export const getScenePath = (userID, pathName) => path.join(`${__dir_projects__}/${userID}/${pathName}`)
+export const getSceneDataPath = (userID, projectID) => `${__dir_projects__}/${userID}/${projectID}/${__scene_data_file_name_}`
 
-  return createScenePaths(userDIR, pathDIR)
+export const createUserScenePaths = (userID, pathName) => {
+  const userDIR = path.join(`${__dir_projects__}/${userID}`)
+  const sceneDIR = getScenePath(userID, pathName)
+
+  return createScenePaths(userDIR, sceneDIR)
 }
 
-export const getScenDataPath = (userID, projectName) => `${__dir_projects}/${userID}/${projectName}/${__subdir_projects.projects}/${__dir_scene_data_}`
-
 export const readJsonFileByPath = async (filepath) => {
-  return await fsPromises.readFile(filepath);
+  try {
+    return await fsPromises.readFile(filepath);
+  } catch {
+    throw new HandledRespError() // inner try catch
+  }
 }
 
 export const writeJsonFileByPath = async (filepath, sceneData) => {
-  return await fsPromises.writeFile(filepath, JSON.stringify(sceneData));
+  try {
+    return await fsPromises.writeFile(filepath, JSON.stringify(sceneData));
+  } catch {
+    throw new HandledRespError() // inner try catch
+  }
+}
+
+export const removeSceneDIR = async (pathName) => {
+  try {
+    return await fsPromises.rmdir(pathName, {
+      recursive: true,
+      force: true
+    })
+  } catch {
+    throw new HandledRespError() // inner try catch
+  }
 }
