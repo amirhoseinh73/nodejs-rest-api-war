@@ -1,7 +1,7 @@
 import { Messages } from "../helpers/messages.js"
 import Project from "../models/ProjectModel.js"
 import { respER, respSC } from "../middlewares/response.js";
-import { createUserProjectPaths, getProjectDataPath, getProjectPath, readJsonFileByPath, removeProjectDIR, writeJsonFileByPath } from "../helpers/ProjectHelper.js"
+import { readProjectData, removeProjectData, writeProjectData } from "../helpers/fileHelper.js"
 import { HandledRespError } from "../helpers/errorThrow.js";
 
 const projectController = {
@@ -13,6 +13,10 @@ const projectController = {
       }).lean()
 
       if ( ! allProjects ) throw new HandledRespError(404, Messages.noData)
+
+      await Promise.all( allProjects.map( async projectInfo => {
+        return projectInfo.data = await projectController._readProjectDataFromFile(projectInfo._id)
+      } ))
 
       return res.status(200).json(respSC(allProjects))
     } catch(err) {
@@ -32,12 +36,9 @@ const projectController = {
 
       const createdProject = await projectController._saveNewProjectByUserID(userInfo._id, data)
       
-      const createdPaths = createUserProjectPaths(userInfo._id, createdProject._id)
-      if ( ! createdPaths ) throw new HandledRespError(500, Messages.pathCreateFailed)
-
       let projectData = {}
       if ( body.data ) projectData = body.data
-      await projectController._writeProjectData(userInfo._id, createdProject._id, projectData)
+      await writeProjectData(createdProject._id, projectData)
 
       return res.status(200).json( respSC( createdProject, 200, Messages.itemCreated.replace(":item", "Project") ) )
     } catch (err) {
@@ -63,12 +64,11 @@ const projectController = {
     const projectID = req.params.id
 
     try {
-      const userInfo = await res.userInfo
       const projectInfo = await Project.findById(projectID).lean()
 
       if ( ! projectInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Project"))
 
-      projectInfo.data = await projectController._readProjectDataFromFile(userInfo._id, projectInfo._id)
+      projectInfo.data = await projectController._readProjectDataFromFile(projectInfo._id)
 
       return res.status(200).json(respSC(projectInfo))
     } catch(err) {
@@ -93,7 +93,7 @@ const projectController = {
       const updatedProject = await projectInfo.save()
 
       if ( body.data ) {
-        await projectController._writeProjectData(userInfo._id, updatedProject._id, body.data)
+        await writeProjectData(createdProject._id, body.data)
         updatedProject.data = body.data
       }
 
@@ -108,14 +108,11 @@ const projectController = {
     const projectID = req.params.id
 
     try {
-      const userInfo = await res.userInfo
       const projectInfo = await Project.findById(projectID)
 
       if ( ! projectInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Project"))
 
-      const projectPath = getProjectPath(userInfo._id, projectInfo._id)
-
-      await removeProjectDIR(projectPath)
+      await removeProjectData(projectInfo._id)
       await projectInfo.remove()
 
       return res.status(200).json(respSC(projectInfo))
@@ -124,21 +121,9 @@ const projectController = {
     }
   },
 
-  _writeProjectData: async (userID, projectID, projectData) => {
+  _readProjectDataFromFile: async (projectID) => {
     try {
-      const filepath = getProjectDataPath(userID, projectID)
-      await writeJsonFileByPath(filepath, projectData)
-      
-      return true
-    } catch( err ) {
-      throw err
-    }
-  },
-
-  _readProjectDataFromFile: async (userID, projectID) => {
-    try {
-      const filepath = getProjectDataPath(userID, projectID)
-      const data = await readJsonFileByPath(filepath)
+      const data = await readProjectData(projectID)
       
       return JSON.parse(data.toString())
     } catch( err ) {

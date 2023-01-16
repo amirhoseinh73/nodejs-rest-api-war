@@ -31,17 +31,10 @@ export const jwt_blacklist = []
 export const __filename__ = fileURLToPath(import.meta.url);
 export const __dirname__ = path.dirname(__filename__);
 
-export const __dir_projects__ = `${__dirname__}/../uploads/projects`
+export const __dir_projects__ = `${__dirname__}/../uploads/data/projects`
+export const __dir_scenes__ = `${__dirname__}/../uploads/data/scenes`
 
-export const __subdir_projects__ = {
-  "images"    : "images",
-  "models"    : "models",
-  "targets"   : "targets",
-  "videos"    : "videos",
-  // "projects"  : "projects",
-  // "positions" : "positions",
-  // "scales"    : "scales",
-  // "active_target_names" : "active_target_names",
-}
-
-export const __project_data_file_name_ = "project-data.json"
+export const __dir_images__ = `${__dirname__}/../uploads/data/images`
+export const __dir_models__ = `${__dirname__}/../uploads/data/models`
+export const __dir_targets__ = `${__dirname__}/../uploads/data/targets`
+export const __dir_videos__ = `${__dirname__}/../uploads/data/videos`

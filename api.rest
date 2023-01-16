@@ -77,7 +77,8 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzRmZDkxNjIxMmEyYmI1YzgyOTY1NyIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3Mzg1NDM3MCwiZXhwIjoxNjczOTQwNzcwfQ.A4JGAMvzHmUFC_QNX5wlISWZ_k4y3vb7pTLjfoCzGuY
 
 {
-  "title": "a"
+  "title": "b",
+  "data": {"test": "1234"}
 }
 
 ###
