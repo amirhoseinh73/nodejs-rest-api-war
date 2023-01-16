@@ -51,11 +51,15 @@ export const writeJsonFileByPath = async (filepath, sceneData) => {
 
 export const removeSceneDIR = async (pathName) => {
   try {
-    return await fsPromises.rmdir(pathName, {
+    fs.rmSync(pathName, {
       recursive: true,
       force: true
     })
-  } catch {
+    return await fsPromises.rm(pathName, {
+      recursive: true,
+      force: true
+    })
+  } catch(err) {
     throw new HandledRespError() // inner try catch
   }
 }

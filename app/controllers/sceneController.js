@@ -25,7 +25,7 @@ const sceneController = {
     const data = {}
 
     if ( body.title ) data.title = body.title
-    if ( body.scale ) data.scale = JSON.stringify(body.scale)
+    // if ( body.scale ) data.scale = JSON.stringify(body.scale)
 
     try {
       const userInfo = await res.userInfo
@@ -35,7 +35,9 @@ const sceneController = {
       const createdPaths = createUserScenePaths(userInfo._id, createdScene._id)
       if ( ! createdPaths ) throw new HandledRespError(500, Messages.pathCreateFailed)
 
-      if ( body.data ) await sceneController._writeSceneData(userInfo._id, createdScene._id, body.data)
+      let sceneData = {}
+      if ( body.data ) sceneData = body.data
+      await sceneController._writeSceneData(userInfo._id, createdScene._id, sceneData)
 
       return res.status(200).json( respSC( createdScene, 200, Messages.itemCreated.replace(":item", "scene") ) )
     } catch (err) {
@@ -57,7 +59,7 @@ const sceneController = {
     }
   },
 
-  readScene: async () => {
+  readScene: async ( req, res ) => {
     const sceneID = req.params.id
 
     try {
@@ -66,16 +68,16 @@ const sceneController = {
 
       if ( ! sceneInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Scene"))
 
-      const sceneData = await sceneController._readSceneDataFromFile(userInfo._id, sceneInfo._id)
-      sceneInfo.data = JSON.parse(sceneData)
+      sceneInfo.data = await sceneController._readSceneDataFromFile(userInfo._id, sceneInfo._id)
 
       return res.status(200).json(respSC(sceneInfo))
     } catch(err) {
+      console.log(err);
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   },
 
-  updateScene: async () => {
+  updateScene: async ( req, res ) => {
     const sceneID = req.params.id
     const body = req.body
 
@@ -91,7 +93,7 @@ const sceneController = {
       const updatedScene = await sceneInfo.save()
 
       if ( body.data ) {
-        await sceneController._writeSceneData(createdScene._id, body.data)
+        await sceneController._writeSceneData(userInfo._id, updatedScene._id, body.data)
         updatedScene.data = body.data
       }
 
@@ -102,7 +104,7 @@ const sceneController = {
     }
   },
 
-  deleteScene: async () => {
+  deleteScene: async ( req, res ) => {
     const sceneID = req.params.id
 
     try {
@@ -113,32 +115,11 @@ const sceneController = {
 
       const scenePath = getScenePath(userInfo._id, sceneInfo._id)
 
-      await sceneInfo.remove()
       await removeSceneDIR(scenePath)
+      await sceneInfo.remove()
 
       return res.status(200).json(respSC(sceneInfo))
     } catch(err) {
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
-    }
-  },
-
-  createSceneData: async (req, res) => {
-    const sceneID = req.params.id
-    const sceneData = req.body.data
-
-    try {
-      if ( ! sceneData ) throw new HandledRespError(404, Messages.noData)
-
-      const userInfo = await res.userInfo
-      const sceneInfo = await Scene.findById(sceneID).lean()
-
-      if ( ! sceneInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Scene"))
-
-      await sceneController._writeSceneData(userInfo._id, sceneInfo._id, sceneData)
-      sceneInfo.data = body.data
-
-      return res.status(201).json(respSC(sceneInfo))
-    } catch {
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   },
@@ -154,27 +135,10 @@ const sceneController = {
     }
   },
 
-  readSceneData: async (req, res) => {
-    const sceneID =  req.params.id
-
-    try {
-      const userInfo = await res.userInfo
-      const sceneInfo = await Scene.findById(sceneID)
-      if ( ! sceneInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Scene"))
-
-      await sceneController._readSceneDataFromFile(userInfo._id, sceneInfo._id)
-
-      return res.status(200).json(respSC(parsedData))
-    } catch( err ) {
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
-    }
-  },
-
   _readSceneDataFromFile: async (userID, sceneID) => {
     try {
       const filepath = getSceneDataPath(userID, sceneID)
       const data = await readJsonFileByPath(filepath)
-      if( ! data ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "data"))
       
       return JSON.parse(data.toString())
     } catch( err ) {

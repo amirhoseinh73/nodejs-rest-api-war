@@ -24,7 +24,7 @@ const userController = {
         user.password = await bcryptjs.hash( user.password, 10 )
         newUser = await user.save()
       } catch {
-        throw new HandledRespError(400)
+        throw new HandledRespError(409)
       }
       
       return res.status(201).json(respSC(newUser, 201, Messages.itemCreated.replace(":item", "user")))
@@ -50,7 +50,7 @@ const userController = {
 
       return res.status(200).json(respSC(token))
     } catch( err ) {
-      return res.status(500).json(respER(statusCode, err))
+      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
     }
   },
 
@@ -63,15 +63,6 @@ const userController = {
       return res.status(200).json(respSC([]) )
     } catch( err ) {
       return res.status(500).json(respER())
-    }
-  },
-
-  list: async function( req, res ) {
-    try {
-      const users = await User.find()
-      return res.status(200).json(respSC(users))
-    } catch( err ) {
-      return res.status(500).json(respER(500, err))
     }
   },
 
@@ -88,13 +79,16 @@ const userController = {
   changePass: async function( req, res ) {
     try {
       const userInfo = res.userInfo
+      const body = req.body
 
-      if (userInfo.password.length < 6) throw new HandledRespError(406, Messages.passwordNotVerified)
+      if ( ! await bcryptjs.compare( body.old_password, userInfo.password ) ) throw new HandledRespError(406, Messages.passwordWrong)
+      if (body.new_password.length < 6) throw new HandledRespError(406, Messages.passwordNotVerified)
 
       try {
-        userInfo.password = await bcryptjs.hash( user.password, 10 )
+        userInfo.password = await bcryptjs.hash( body.new_password, 10 )
         await userInfo.save()
-      } catch {
+      } catch(err) {
+        console.log(err);
         throw new HandledRespError(400)
       }
 
@@ -121,6 +115,15 @@ const userController = {
       return res.status(200).json(respSC(userInfo, 200, Messages.itemUpdated.replace( ":item", "user" )))
     } catch( err ) {
       return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+    }
+  },
+
+  list: async function( req, res ) {
+    try {
+      const users = await User.find()
+      return res.status(200).json(respSC(users))
+    } catch( err ) {
+      return res.status(500).json(respER(500, err))
     }
   },
 

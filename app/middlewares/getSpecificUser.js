@@ -1,23 +1,18 @@
+import { HandledRespError } from "../helpers/errorThrow.js"
 import { Messages } from "../helpers/messages.js"
 import User from "../models/userModel.js"
 import { respER } from "./response.js"
 
-const getSpecificUser = async ( req, res, next ) => {
-  let user
-  let statusCode = 500
-
+const getSpecificUserByID = async ( req, res, next ) => {
   try {
-    user = await User.findById( req.params.id )
-    if ( ! user ) {
-      statusCode = 404
-      return res.status( statusCode ).json( respER( statusCode, Messages.itemNotFound.replace( ":item", "user" ) ) )
-    }
+    const userByID = await User.findById( req.params.id )
+    if ( ! userByID ) throw new HandledRespError(404, Messages.itemNotFound.replace( ":item", "user" ))
+
+    res.userByID = userByID
+    next()
   } catch( err ) {
     return res.status( statusCode ).json( respER( statusCode, err ) )
   }
-
-  res.user = user
-  next()
 }
 
-export default getSpecificUser
+export default getSpecificUserByID

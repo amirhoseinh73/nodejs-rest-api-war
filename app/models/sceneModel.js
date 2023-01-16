@@ -9,10 +9,10 @@ const sceneSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  scale: {
-    type: String,
-    required: false
-  },
+  // scale: {
+  //   type: String,
+  //   required: false
+  // },
   created_at: {
     type: Date,
     required: true,
