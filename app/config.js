@@ -44,4 +44,4 @@ export const __subdir_projects__ = {
   // "active_target_names" : "active_target_names",
 }
 
-export const __scene_data_file_name_ = "scene-data.json"
+export const __project_data_file_name_ = "project-data.json"

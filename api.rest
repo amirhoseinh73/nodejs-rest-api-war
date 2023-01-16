@@ -65,14 +65,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3ZTZkM
 
 
 ###
-// get All scenes
-GET http://localhost:4000/api/scene/
+// get All projects
+GET http://localhost:4000/api/project/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzRmZDkxNjIxMmEyYmI1YzgyOTY1NyIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3Mzg1NDM3MCwiZXhwIjoxNjczOTQwNzcwfQ.A4JGAMvzHmUFC_QNX5wlISWZ_k4y3vb7pTLjfoCzGuY
 
 ###
-// save scene
-POST http://localhost:4000/api/scene/
+// save project
+POST http://localhost:4000/api/project/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzRmZDkxNjIxMmEyYmI1YzgyOTY1NyIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3Mzg1NDM3MCwiZXhwIjoxNjczOTQwNzcwfQ.A4JGAMvzHmUFC_QNX5wlISWZ_k4y3vb7pTLjfoCzGuY
 
@@ -81,14 +81,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzRmZDkxN
 }
 
 ###
-// get scene
-GET http://localhost:4000/api/scene/63c5099fbdc21b1644fc905a
+// get project
+GET http://localhost:4000/api/project/63c5099fbdc21b1644fc905a
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzRmZDkxNjIxMmEyYmI1YzgyOTY1NyIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3Mzg1NDM3MCwiZXhwIjoxNjczOTQwNzcwfQ.A4JGAMvzHmUFC_QNX5wlISWZ_k4y3vb7pTLjfoCzGuY
 
 ###
-// update scene
-PATCH http://localhost:4000/api/scene/63c5099fbdc21b1644fc905a
+// update project
+PATCH http://localhost:4000/api/project/63c5099fbdc21b1644fc905a
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzRmZDkxNjIxMmEyYmI1YzgyOTY1NyIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3Mzg1NDM3MCwiZXhwIjoxNjczOTQwNzcwfQ.A4JGAMvzHmUFC_QNX5wlISWZ_k4y3vb7pTLjfoCzGuY
 
@@ -98,7 +98,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzRmZDkxN
 }
 
 ###
-// delete scene
-DELETE http://localhost:4000/api/scene/63c50825bc785ddfe8c38729
+// delete project
+DELETE http://localhost:4000/api/project/63c5087abc785ddfe8c3874d
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzRmZDkxNjIxMmEyYmI1YzgyOTY1NyIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3Mzg1NDM3MCwiZXhwIjoxNjczOTQwNzcwfQ.A4JGAMvzHmUFC_QNX5wlISWZ_k4y3vb7pTLjfoCzGuY

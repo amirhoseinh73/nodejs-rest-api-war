@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-const sceneSchema = new mongoose.Schema({
+const projectSchema = new mongoose.Schema({
   title: {
     type: String,
     required: false,
@@ -30,4 +30,4 @@ const sceneSchema = new mongoose.Schema({
   }
 })
 
-export default mongoose.model( "Scene", sceneSchema )
+export default mongoose.model( "Project", projectSchema )

@@ -1,10 +1,10 @@
 import path from "path"
-import { __dir_projects__, __scene_data_file_name_, __subdir_projects__ } from "../config.js"
+import { __dir_projects__, __project_data_file_name_, __subdir_projects__ } from "../config.js"
 import { promises as fsPromises } from "fs";
 import fs from "fs";
 import { HandledRespError } from "./errorThrow.js";
 
-const createScenePaths = (userDIR, pathDIR) => {
+const createProjectPaths = (userDIR, pathDIR) => {
   let flag = false
 
   // create user path by id
@@ -23,14 +23,14 @@ const createScenePaths = (userDIR, pathDIR) => {
   return true
 }
 
-export const getScenePath = (userID, pathName) => path.join(`${__dir_projects__}/${userID}/${pathName}`)
-export const getSceneDataPath = (userID, projectID) => `${__dir_projects__}/${userID}/${projectID}/${__scene_data_file_name_}`
+export const getProjectPath = (userID, pathName) => path.join(`${__dir_projects__}/${userID}/${pathName}`)
+export const getProjectDataPath = (userID, projectID) => `${__dir_projects__}/${userID}/${projectID}/${__project_data_file_name_}`
 
-export const createUserScenePaths = (userID, pathName) => {
+export const createUserProjectPaths = (userID, pathName) => {
   const userDIR = path.join(`${__dir_projects__}/${userID}`)
-  const sceneDIR = getScenePath(userID, pathName)
+  const projectDIR = getProjectPath(userID, pathName)
 
-  return createScenePaths(userDIR, sceneDIR)
+  return createProjectPaths(userDIR, projectDIR)
 }
 
 export const readJsonFileByPath = async (filepath) => {
@@ -41,15 +41,15 @@ export const readJsonFileByPath = async (filepath) => {
   }
 }
 
-export const writeJsonFileByPath = async (filepath, sceneData) => {
+export const writeJsonFileByPath = async (filepath, projectData) => {
   try {
-    return await fsPromises.writeFile(filepath, JSON.stringify(sceneData));
+    return await fsPromises.writeFile(filepath, JSON.stringify(projectData));
   } catch {
     throw new HandledRespError() // inner try catch
   }
 }
 
-export const removeSceneDIR = async (pathName) => {
+export const removeProjectDIR = async (pathName) => {
   try {
     fs.rmSync(pathName, {
       recursive: true,
