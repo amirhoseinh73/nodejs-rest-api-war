@@ -1,8 +1,8 @@
 import { Messages } from "../helpers/messages.js"
-import Project from "../models/ProjectModel.js"
-import { respER, respSC } from "../middlewares/response.js";
+import { respER, respSC } from "../helpers/response.js";
 import { readProjectData, removeProjectData, writeProjectData } from "../helpers/fileHelper.js"
 import { HandledRespError } from "../helpers/errorThrow.js";
+import { Project } from "../DB.js";
 
 const projectController = {
   readAllProjects: async ( req, res ) => {
@@ -29,7 +29,6 @@ const projectController = {
     const data = {}
 
     if ( body.title ) data.title = body.title
-    // if ( body.scale ) data.scale = JSON.stringify(body.scale)
 
     try {
       const userInfo = await res.userInfo
@@ -72,7 +71,6 @@ const projectController = {
 
       return res.status(200).json(respSC(projectInfo))
     } catch(err) {
-      console.log(err);
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   },
@@ -82,18 +80,16 @@ const projectController = {
     const body = req.body
 
     try {
-      const userInfo = await res.userInfo
       const projectInfo = await Project.findById(projectID)
 
       if ( ! projectInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Project"))
       
       if ( body.title ) projectInfo.title = body.title
-      if ( body.scale ) projectInfo.scale = JSON.stringify(body.scale)
 
       const updatedProject = await projectInfo.save()
 
       if ( body.data ) {
-        await writeProjectData(createdProject._id, body.data)
+        await writeProjectData(updatedProject._id, body.data)
         updatedProject.data = body.data
       }
 

@@ -15,7 +15,8 @@
     "express-fileupload": "^1.4.0",
     "express-list-endpoints": "^6.0.0",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.8.2"
+    "mongoose": "^6.8.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",

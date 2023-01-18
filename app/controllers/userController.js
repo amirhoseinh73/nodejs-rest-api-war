@@ -1,10 +1,11 @@
 import bcryptjs from "bcryptjs"
 import { Messages } from "../helpers/messages.js"
-import { respER, respSC } from "../middlewares/response.js"
-import User from "../models/userModel.js"
+import { respER, respSC } from "../helpers/response.js"
+
 import jwt from "jsonwebtoken"
 import { jwt_blacklist, JWT_SECRET } from "../config.js"
 import { HandledRespError } from "../helpers/errorThrow.js"
+import { User } from "../DB.js"
 
 const userController = {
   register: async function( req, res ) {
@@ -129,10 +130,10 @@ const userController = {
 
   delete: async function( req, res ) {
     try {
-      const userInfo = await res.userInfo
+      const userByID = await res.userByID
       
       try {
-        await userInfo.remove()
+        await userByID.remove()
       } catch {
         throw new HandledRespError(500)
       }

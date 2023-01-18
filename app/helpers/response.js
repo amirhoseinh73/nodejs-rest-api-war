@@ -1,4 +1,4 @@
-import { Messages } from "../helpers/messages.js";
+import { Messages } from "./messages.js";
 
 export const respSC = ( data, code = 200, message = Messages.success ) => {
   return {

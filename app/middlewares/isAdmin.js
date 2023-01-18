@@ -1,5 +1,5 @@
 import { HandledRespError } from "../helpers/errorThrow.js"
-import { respER } from "./response.js"
+import { respER } from "../helpers/response.js"
 
 const isAdmin = async ( req, res, next ) => {
   try {

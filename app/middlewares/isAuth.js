@@ -3,7 +3,7 @@ import { JWT_SECRET, jwt_blacklist } from "../config.js"
 import User from "../models/userModel.js"
 import { HandledRespError } from "../helpers/errorThrow.js"
 import { Messages } from "../helpers/messages.js"
-import { respER } from "./response.js"
+import { respER } from "../helpers/response.js"
 
 const isAuth = async ( req, res, next ) => {
   const authorization = req.headers.authorization
