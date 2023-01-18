@@ -10,8 +10,9 @@ const getSpecificUserByID = async ( req, res, next ) => {
 
     res.userByID = userByID
     next()
-  } catch( err ) {
-    return res.status( statusCode ).json( respER( statusCode, err ) )
+  } catch(err) {
+    if ( ! err.statusCode ) err.statusCode = 500
+    return res.status(err.statusCode).json(respER(err.statusCode, err.message))
   }
 }
 

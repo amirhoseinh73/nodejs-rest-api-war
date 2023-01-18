@@ -103,3 +103,45 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2Y
 DELETE http://localhost:4000/api/project/63c7e62bacf8b4aabfee4a96
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+
+###
+// get All scenes
+GET http://localhost:4000/api/project/list/scene/63c7e62facf8b4aabfee4a99
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+
+###
+// save scene
+POST http://localhost:4000/api/scene/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+
+{
+  "project_id" : "63c7e62facf8b4aabfee4a99",
+  "title": "c",
+  "data": {"test": "1234"}
+}
+
+###
+// get scene
+GET http://localhost:4000/api/scene/63c7ec75c8642c8c5e5be759
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+
+###
+// update project
+PATCH http://localhost:4000/api/scene/63c7ec75c8642c8c5e5be759
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+
+{
+  "project_id" : "63c7e62facf8b4aabfee4a99",
+  "title": "b",
+  "data": {"mydata":"scene"}
+}
+
+###
+// delete project
+DELETE http://localhost:4000/api/scene/63c7efd5a2e6a30a4aae4aa6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw

@@ -20,6 +20,7 @@ const projectController = {
 
       return res.status(200).json(respSC(allProjects))
     } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   },
@@ -41,6 +42,7 @@ const projectController = {
 
       return res.status(200).json( respSC( createdProject, 200, Messages.itemCreated.replace(":item", "Project") ) )
     } catch (err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   },
@@ -71,6 +73,7 @@ const projectController = {
 
       return res.status(200).json(respSC(projectInfo))
     } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   },
@@ -96,6 +99,7 @@ const projectController = {
 
       return res.status(200).json( respSC( updatedProject, 200, Messages.itemUpdated.replace(":item", "Project") ) )
     } catch (err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   },
@@ -113,6 +117,7 @@ const projectController = {
 
       return res.status(200).json(respSC(projectInfo))
     } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   },
@@ -122,7 +127,7 @@ const projectController = {
       const data = await readProjectData(projectID)
       
       return JSON.parse(data.toString())
-    } catch( err ) {
+    } catch(err) {
       throw err
     }
   }

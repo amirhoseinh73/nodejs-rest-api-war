@@ -29,7 +29,8 @@ const userController = {
       }
       
       return res.status(201).json(respSC(newUser, 201, Messages.itemCreated.replace(":item", "user")))
-    } catch( err ) {
+    } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json(respER(err.statusCode, err.message))
     }
   },
@@ -50,7 +51,8 @@ const userController = {
       }, JWT_SECRET, {expiresIn: "1d"})
 
       return res.status(200).json(respSC(token))
-    } catch( err ) {
+    } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json(respER(err.statusCode, err.message))
     }
   },
@@ -62,7 +64,7 @@ const userController = {
       jwt_blacklist.push(userInfo.token)
       
       return res.status(200).json(respSC([]) )
-    } catch( err ) {
+    } catch(err) {
       return res.status(500).json(respER())
     }
   },
@@ -72,7 +74,7 @@ const userController = {
       const userInfo = await res.userInfo
 
       return res.status(200).json(respSC(userInfo))
-    } catch( err ) {
+    } catch(err) {
       return res.status(500).json(respER())
     }
   },
@@ -89,12 +91,12 @@ const userController = {
         userInfo.password = await bcryptjs.hash( body.new_password, 10 )
         await userInfo.save()
       } catch(err) {
-        console.log(err);
         throw new HandledRespError(400)
       }
 
       return res.status(200).json(respSC(userInfo, 200, Messages.passwordChanged))
     } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json(respER(err.statusCode, err.message))
     }
   },
@@ -114,7 +116,8 @@ const userController = {
       }
 
       return res.status(200).json(respSC(userInfo, 200, Messages.itemUpdated.replace( ":item", "user" )))
-    } catch( err ) {
+    } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json(respER(err.statusCode, err.message))
     }
   },
@@ -123,7 +126,7 @@ const userController = {
     try {
       const users = await User.find()
       return res.status(200).json(respSC(users))
-    } catch( err ) {
+    } catch(err) {
       return res.status(500).json(respER(500, err))
     }
   },
@@ -139,7 +142,8 @@ const userController = {
       }
       
       return res.status(200).json(respSC([],200, Messages.itemDeleted.replace( ":item", "user")))
-    } catch( err ) {
+    } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json(respER(err.statusCode, err.message))
     }
   },

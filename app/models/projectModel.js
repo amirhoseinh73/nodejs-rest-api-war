@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import mongoose, { Schema } from "mongoose"
 
 const projectSchema = new mongoose.Schema({
   title: {
@@ -6,8 +6,9 @@ const projectSchema = new mongoose.Schema({
     required: false,
   },
   user_id: {
-    type: String,
-    required: true
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "User"
   },
   created_at: {
     type: Date,

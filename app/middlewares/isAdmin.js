@@ -7,7 +7,8 @@ const isAdmin = async ( req, res, next ) => {
     if ( ! userInfo.is_admin ) throw new HandledRespError(401)
 
     next()
-  } catch( err ) {
+  } catch(err) {
+    if ( ! err.statusCode ) err.statusCode = 500
     return res.status(err.statusCode).json(respER(err.statusCode, err.message))
   }
 }

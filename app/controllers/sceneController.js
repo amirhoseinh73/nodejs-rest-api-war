@@ -10,7 +10,10 @@ class sceneController {
   readAll = async ( req, res ) => {
     const projectID = req.params.id
     try {
-      const allScenes = await Project.find({
+      const projectInfo = await Project.findById(projectID).lean()
+      if ( ! projectInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Project"))
+
+      const allScenes = await Scene.find({
         project_id: projectID
       }).lean()
 
@@ -20,8 +23,9 @@ class sceneController {
         return sceneInfo.data = await this._readSceneDataFromFile(sceneInfo._id)
       } ))
 
-      return res.status(200).json(respSC(allProjects))
+      return res.status(200).json(respSC(allScenes))
     } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   }
@@ -31,7 +35,7 @@ class sceneController {
       const data = await readSceneData(sceneID)
       
       return JSON.parse(data.toString())
-    } catch( err ) {
+    } catch(err) {
       throw err
     }
   }
@@ -43,8 +47,11 @@ class sceneController {
 
       const data = {project_id: body.project_id}
 
+      const projectInfo = await Project.findById(data.project_id).lean()
+      if ( ! projectInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "project"))
+
       if ( body.title ) data.title = body.title
-      if ( req.files.target ) data.target = this._saveUploadedTarget(req.files.target)
+      if ( req.files && req.files.target ) data.target = this._saveUploadedTarget(req.files.target)
 
       const newScene = new Scene(data)
       const createdScene = await newScene.save()
@@ -54,7 +61,8 @@ class sceneController {
       await writeSceneData(createdScene._id, sceneData)
 
       return res.status(200).json( respSC( createdScene, 200, Messages.itemCreated.replace(":item", "Scene") ) )
-    } catch (err) {
+    } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   }
@@ -89,6 +97,7 @@ class sceneController {
 
       return res.status(200).json(respSC(sceneInfo))
     } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   }
@@ -103,8 +112,7 @@ class sceneController {
       if ( ! sceneInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Scene"))
       
       if ( body.title ) sceneInfo.title = body.title
-      console.log(req.files.target);
-      if ( req.files.target ) {
+      if ( req.files && req.files.target ) {
         await removeFile(sceneInfo.target)
         data.target = this._saveUploadedTarget(req.files.target)
       }
@@ -117,7 +125,8 @@ class sceneController {
       }
 
       return res.status(200).json( respSC( updatedScene, 200, Messages.itemUpdated.replace(":item", "Scene") ) )
-    } catch (err) {
+    } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   }
@@ -130,12 +139,13 @@ class sceneController {
 
       if ( ! sceneInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Scene"))
 
-      await removeFile(sceneInfo.target)
+      if (sceneInfo.target) await removeFile(sceneInfo.target)
       await removeSceneData(sceneInfo._id)
       await sceneInfo.remove()
 
       return res.status(200).json(respSC(sceneInfo))
     } catch(err) {
+      if ( ! err.statusCode ) err.statusCode = 500
       return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
     }
   }

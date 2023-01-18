@@ -30,7 +30,8 @@ const isAuth = async ( req, res, next ) => {
     userInfo.token = token
     res.userInfo = userInfo
     next()
-  } catch( err ) {
+  } catch(err) {
+    if ( ! err.statusCode ) err.statusCode = 500
     return res.status(err.statusCode).json(respER(err.statusCode, err.message))
   }
 }
