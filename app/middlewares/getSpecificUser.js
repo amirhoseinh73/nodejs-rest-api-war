@@ -1,7 +1,6 @@
-import { HandledRespError } from "../helpers/errorThrow.js"
+import { HandledRespError, resErrCatch } from "../helpers/errorThrow.js"
 import { Messages } from "../helpers/messages.js"
-import User from "../models/userModel.js"
-import { respER } from "../helpers/response.js"
+import { User } from "../config.js"
 
 const getSpecificUserByID = async ( req, res, next ) => {
   try {
@@ -11,8 +10,7 @@ const getSpecificUserByID = async ( req, res, next ) => {
     res.userByID = userByID
     next()
   } catch(err) {
-    if ( ! err.statusCode ) err.statusCode = 500
-    return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+    return resErrCatch(res, err)
   }
 }
 

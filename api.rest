@@ -1,6 +1,6 @@
 ###
 //login
-POST http://localhost:4000/api/users/login
+POST http://localhost:4000/api/user/login
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ###
 //register
-POST http://localhost:4000/api/users/register
+POST http://localhost:4000/api/user/register
 Content-Type: application/json
 
 {
@@ -23,18 +23,18 @@ Content-Type: application/json
 
 ###
 // logout
-GET http://localhost:4000/api/users/logout
+GET http://localhost:4000/api/user/logout
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzM5YjFiN2FiMGQ3YmZiNGFmZDVmYSIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3Mzc2NTU1MCwiZXhwIjoxNjczODUxOTUwfQ.K7-3vn0JdL7Nktslr6ulxMs5Fqs_hs12kOsP1fX1MVM
 
 ###
 // user info
-GET http://localhost:4000/api/users/
+GET http://localhost:4000/api/user/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
 
 ###
 // update password
-PATCH http://localhost:4000/api/users/change-password
+PATCH http://localhost:4000/api/user/change-password
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
 
@@ -45,7 +45,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2Y
 
 ###
 // update user info
-PATCH http://localhost:4000/api/users/
+PATCH http://localhost:4000/api/user/
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
 
@@ -54,13 +54,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2Y
 }
 
 ###
-// admin get users list
-GET http://localhost:4000/api/users/list
+// admin get user list
+GET http://localhost:4000/api/user/list
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
 
 ###
 // admin delete specific user
-DELETE http://localhost:4000/api/users/id
+DELETE http://localhost:4000/api/user/id
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3ZTZkMmMwZTliNzBjZGVjZjE5NiIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3MzE2OTMxMCwiZXhwIjoxNjczMTY5NDEwfQ.n_-g4Ub3rndvVQYpIcClKpVo8qvx_F3jtH2OJ--gUvY
 
 
@@ -68,13 +68,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYjU3ZTZkM
 // get All projects
 GET http://localhost:4000/api/project/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY2JiNTQxMGQwMTc5NWNjMWEwM2RhNiIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDI5NDU5NSwiZXhwIjoxNjc0MzgwOTk1fQ.ZdMC2lXASqMf8wSn-ag5-Jjuesaq3KGscytCsv7DZOc
 
 ###
 // save project
 POST http://localhost:4000/api/project/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY2JiNTQxMGQwMTc5NWNjMWEwM2RhNiIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDI5NDU5NSwiZXhwIjoxNjc0MzgwOTk1fQ.ZdMC2lXASqMf8wSn-ag5-Jjuesaq3KGscytCsv7DZOc
 
 {
   "title": "b",
@@ -114,10 +114,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2Y
 // save scene
 POST http://localhost:4000/api/scene/
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzY2JiNTQxMGQwMTc5NWNjMWEwM2RhNiIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDI5NDU5NSwiZXhwIjoxNjc0MzgwOTk1fQ.ZdMC2lXASqMf8wSn-ag5-Jjuesaq3KGscytCsv7DZOc
 
 {
-  "project_id" : "63c7e62facf8b4aabfee4a99",
+  "project_id" : "63cbb5620d01795cc1a03dae",
   "title": "c",
   "data": {"test": "1234"}
 }

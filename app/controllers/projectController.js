@@ -1,8 +1,8 @@
 import { Messages } from "../helpers/messages.js"
-import { respER, respSC } from "../helpers/response.js";
+import { respSC } from "../helpers/response.js";
 import { readProjectData, removeProjectData, writeProjectData } from "../helpers/fileHelper.js"
-import { HandledRespError } from "../helpers/errorThrow.js";
-import { Project } from "../DB.js";
+import { HandledRespError, resErrCatch } from "../helpers/errorThrow.js";
+import { Project } from "../config.js";
 
 const projectController = {
   readAllProjects: async ( req, res ) => {
@@ -20,8 +20,7 @@ const projectController = {
 
       return res.status(200).json(respSC(allProjects))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
+      return resErrCatch(res, err)
     }
   },
 
@@ -42,8 +41,7 @@ const projectController = {
 
       return res.status(200).json( respSC( createdProject, 200, Messages.itemCreated.replace(":item", "Project") ) )
     } catch (err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
+      return resErrCatch(res, err)
     }
   },
 
@@ -73,8 +71,7 @@ const projectController = {
 
       return res.status(200).json(respSC(projectInfo))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
+      return resErrCatch(res, err)
     }
   },
 
@@ -99,8 +96,7 @@ const projectController = {
 
       return res.status(200).json( respSC( updatedProject, 200, Messages.itemUpdated.replace(":item", "Project") ) )
     } catch (err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
+      return resErrCatch(res, err)
     }
   },
 
@@ -117,8 +113,7 @@ const projectController = {
 
       return res.status(200).json(respSC(projectInfo))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
+      return resErrCatch(res, err)
     }
   },
 

@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mongodb_container:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+  web_ar:
+    build: .
+    container_name: web_ar
+    image: web_ar
+    restart: always
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - 4001:4000
+    depends_on:
+      - mongodb_container
+
+volumes:
+  mongodb_data_container:

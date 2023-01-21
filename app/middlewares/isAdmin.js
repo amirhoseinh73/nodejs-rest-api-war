@@ -1,5 +1,4 @@
 import { HandledRespError } from "../helpers/errorThrow.js"
-import { respER } from "../helpers/response.js"
 
 const isAdmin = async ( req, res, next ) => {
   try {
@@ -8,8 +7,7 @@ const isAdmin = async ( req, res, next ) => {
 
     next()
   } catch(err) {
-    if ( ! err.statusCode ) err.statusCode = 500
-    return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+    return resErrCatch(res, err)
   }
 }
 

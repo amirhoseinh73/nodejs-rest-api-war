@@ -1,9 +1,8 @@
 import jwt from "jsonwebtoken"
 import { JWT_SECRET, jwt_blacklist } from "../config.js"
-import User from "../models/userModel.js"
-import { HandledRespError } from "../helpers/errorThrow.js"
+import { User } from "../config.js"
+import { HandledRespError, resErrCatch } from "../helpers/errorThrow.js"
 import { Messages } from "../helpers/messages.js"
-import { respER } from "../helpers/response.js"
 
 const isAuth = async ( req, res, next ) => {
   const authorization = req.headers.authorization
@@ -31,8 +30,7 @@ const isAuth = async ( req, res, next ) => {
     res.userInfo = userInfo
     next()
   } catch(err) {
-    if ( ! err.statusCode ) err.statusCode = 500
-    return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+    return resErrCatch(res, err)
   }
 }
 

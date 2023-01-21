@@ -3,6 +3,10 @@ import express from "express"
 import { fileURLToPath } from 'url'
 import path from "path"
 import bodyParser from "body-parser"
+import multer from "multer";
+import User from "./models/userModel.js"
+import Project from "./models/projectModel.js"
+import Scene from "./models/sceneModel.js"
 
 dotenv.config()
 
@@ -16,9 +20,10 @@ app.use( bodyParser.json({
 
 app.use( bodyParser.urlencoded({
   limit: '5000mb',
-  // parameterLimit: 100000,
   extended: true
 }));
+
+// app.use(multer().array())
 
 export const APP_PORT = process.env.APP_PORT || 3000
 
@@ -34,7 +39,11 @@ export const __dirname__ = path.dirname(__filename__);
 export const __dir_projects__ = `${__dirname__}/../uploads/data/projects`
 export const __dir_scenes__ = `${__dirname__}/../uploads/data/scenes`
 
-export const __dir_images__ = `${__dirname__}/../uploads/data/images`
-export const __dir_models__ = `${__dirname__}/../uploads/data/models`
-export const __dir_targets__ = `${__dirname__}/../uploads/data/targets`
-export const __dir_videos__ = `${__dirname__}/../uploads/data/videos`
+export const __dir_images__ = `${__dirname__}/../uploads/images`
+export const __dir_models__ = `${__dirname__}/../uploads/models`
+export const __dir_targets__ = `${__dirname__}/../uploads/targets`
+export const __dir_videos__ = `${__dirname__}/../uploads/videos`
+
+export {User, Project, Scene}
+
+export const AVAILABLE_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/gif"]

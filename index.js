@@ -12,7 +12,7 @@ dbConnection()
 app.use( express.json() )
 
 //routes
-app.use( "/api/users", userRoutes )
+app.use( "/api/user", userRoutes )
 app.use( "/api/project", projectRoutes )
 app.use( "/api/scene", sceneRoutes )
 

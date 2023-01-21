@@ -1,10 +1,11 @@
 import { v4 as uuidv4 } from "uuid"
 import { Messages } from "../helpers/messages.js"
-import { respER, respSC } from "../helpers/response.js";
+import { respSC } from "../helpers/response.js";
 import { readSceneData, removeFile, removeSceneData, writeSceneData } from "../helpers/fileHelper.js"
-import { HandledRespError } from "../helpers/errorThrow.js";
-import { __dir_targets__ } from "../config.js";
-import { Project, Scene } from "../DB.js";
+import { HandledRespError, resErrCatch } from "../helpers/errorThrow.js";
+import { AVAILABLE_FORMATS, __dir_images__, __dir_targets__ } from "../config.js";
+import { Project, Scene } from "../config.js";
+// import multer from "multer"
 
 class sceneController {
   readAll = async ( req, res ) => {
@@ -25,8 +26,7 @@ class sceneController {
 
       return res.status(200).json(respSC(allScenes))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
+      return resErrCatch(res, err)
     }
   }
 
@@ -51,7 +51,7 @@ class sceneController {
       if ( ! projectInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "project"))
 
       if ( body.title ) data.title = body.title
-      if ( req.files && req.files.target ) data.target = this._saveUploadedTarget(req.files.target)
+      if ( req.files && req.files.target ) data.target = this._saveUploadedFile(req.files.target, __dir_targets__)
 
       const newScene = new Scene(data)
       const createdScene = await newScene.save()
@@ -62,26 +62,7 @@ class sceneController {
 
       return res.status(200).json( respSC( createdScene, 200, Messages.itemCreated.replace(":item", "Scene") ) )
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
-    }
-  }
-
-  _saveUploadedTarget = ( file ) => {
-    let error = false
-    const userFileName = file.name
-    const fileFormat = file.mimetype
-    const newFileName = uuidv4() + userFileName
-
-    try {
-      file.mv(__dir_targets__, (err) => error = err )
-    
-      console.table(file)
-
-      if ( ! error ) return newFileName
-      throw new HandledRespError(500, error)
-    } catch(err) {
-      throw err
+      return resErrCatch(res, err)
     }
   }
 
@@ -90,15 +71,13 @@ class sceneController {
 
     try {
       const sceneInfo = await Scene.findById(sceneID).lean()
-
       if ( ! sceneInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Scene"))
 
       sceneInfo.data = await this._readSceneDataFromFile(sceneInfo._id)
 
       return res.status(200).json(respSC(sceneInfo))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
+      return resErrCatch(res, err)
     }
   }
 
@@ -114,7 +93,7 @@ class sceneController {
       if ( body.title ) sceneInfo.title = body.title
       if ( req.files && req.files.target ) {
         await removeFile(sceneInfo.target)
-        data.target = this._saveUploadedTarget(req.files.target)
+        data.target = this._saveUploadedFile(req.files.target, __dir_targets__)
       }
 
       const updatedScene = await sceneInfo.save()
@@ -126,8 +105,7 @@ class sceneController {
 
       return res.status(200).json( respSC( updatedScene, 200, Messages.itemUpdated.replace(":item", "Scene") ) )
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
+      return resErrCatch(res, err)
     }
   }
 
@@ -140,13 +118,47 @@ class sceneController {
       if ( ! sceneInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Scene"))
 
       if (sceneInfo.target) await removeFile(sceneInfo.target)
+      if (sceneInfo.images) {
+        sceneInfo.images.forEach(async image => {
+          await removeFile(`${__dir_images__}/${image}`)
+        });
+      }
       await removeSceneData(sceneInfo._id)
       await sceneInfo.remove()
 
       return res.status(200).json(respSC(sceneInfo))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json( respER(err.statusCode, err.message) )
+      return resErrCatch(res, err)
+    }
+  }
+
+  uploadImage = async ( req, res ) => {
+    const sceneID = req.params.id
+    try {
+      const file = req.file
+
+      const fileMimeType = file.mimetype
+      const fileSize = file.size
+      const fileCurrentName = file.filename
+
+      if ( ! AVAILABLE_FORMATS.includes(fileMimeType) ) throw new HandledRespError(400)
+
+      const sceneInfo = await Scene.findById(sceneID)
+      if ( ! sceneInfo ) throw new HandledRespError(404, Messages.itemNotFound.replace(":item", "Scene"))
+
+      const oldImages = sceneInfo.images
+      oldImages.push(fileCurrentName)
+
+      const oldSize = sceneInfo.upload_size || 0
+      const newSize = Number(oldSize) + (fileSize/1024)
+      sceneInfo.upload_size = newSize
+
+      sceneInfo.images = oldImages
+      const updatedScene = await sceneInfo.save()
+
+      return res.status(200).json( respSC( updatedScene, 200, Messages.itemCreated.replace(":item", "Image") ) )
+    } catch(err) {
+      return resErrCatch(res, err)
     }
   }
 }

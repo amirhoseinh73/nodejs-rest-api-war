@@ -1,11 +1,10 @@
 import bcryptjs from "bcryptjs"
 import { Messages } from "../helpers/messages.js"
-import { respER, respSC } from "../helpers/response.js"
-
+import { respSC } from "../helpers/response.js"
 import jwt from "jsonwebtoken"
 import { jwt_blacklist, JWT_SECRET } from "../config.js"
-import { HandledRespError } from "../helpers/errorThrow.js"
-import { User } from "../DB.js"
+import { HandledRespError, resErrCatch } from "../helpers/errorThrow.js"
+import { User } from "../config.js"
 
 const userController = {
   register: async function( req, res ) {
@@ -30,8 +29,7 @@ const userController = {
       
       return res.status(201).json(respSC(newUser, 201, Messages.itemCreated.replace(":item", "user")))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+      return resErrCatch(res, err)
     }
   },
 
@@ -52,8 +50,7 @@ const userController = {
 
       return res.status(200).json(respSC(token))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+      return resErrCatch(res, err)
     }
   },
 
@@ -65,7 +62,7 @@ const userController = {
       
       return res.status(200).json(respSC([]) )
     } catch(err) {
-      return res.status(500).json(respER())
+      return resErrCatch(res, err)
     }
   },
 
@@ -75,7 +72,7 @@ const userController = {
 
       return res.status(200).json(respSC(userInfo))
     } catch(err) {
-      return res.status(500).json(respER())
+      return resErrCatch(res, err)
     }
   },
 
@@ -96,8 +93,7 @@ const userController = {
 
       return res.status(200).json(respSC(userInfo, 200, Messages.passwordChanged))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+      return resErrCatch(res, err)
     }
   },
 
@@ -117,8 +113,7 @@ const userController = {
 
       return res.status(200).json(respSC(userInfo, 200, Messages.itemUpdated.replace( ":item", "user" )))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+      return resErrCatch(res, err)
     }
   },
 
@@ -127,7 +122,7 @@ const userController = {
       const users = await User.find()
       return res.status(200).json(respSC(users))
     } catch(err) {
-      return res.status(500).json(respER(500, err))
+      return resErrCatch(res, err)
     }
   },
 
@@ -143,8 +138,7 @@ const userController = {
       
       return res.status(200).json(respSC([],200, Messages.itemDeleted.replace( ":item", "user")))
     } catch(err) {
-      if ( ! err.statusCode ) err.statusCode = 500
-      return res.status(err.statusCode).json(respER(err.statusCode, err.message))
+      return resErrCatch(res, err)
     }
   },
 }

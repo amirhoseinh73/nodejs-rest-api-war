@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose"
 const sceneSchema = new mongoose.Schema({
   title: {
     type: Schema.Types.String,
-    required: true
+    required: false
   },
   target: {
     type: Schema.Types.String,
@@ -17,6 +17,18 @@ const sceneSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     required: true,
     ref: "Project"
+  },
+  images: {
+    type: Schema.Types.Array,
+    required: false
+  },
+  videos: {
+    type: Schema.Types.Array,
+    required: false
+  },
+  upload_size: {
+    type: Schema.Types.Number, // size in KB
+    required: false
   },
   created_at: {
     type: Schema.Types.Date,
