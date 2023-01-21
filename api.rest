@@ -1,6 +1,6 @@
 ###
 //login
-POST http://localhost:4000/api/user/login
+POST http://192.168.1.10:4000/api/user/login
 Content-Type: application/json
 
 {
@@ -129,7 +129,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
 
 ###
-// update project
+// update scene
 PATCH http://localhost:4000/api/scene/63c7ec75c8642c8c5e5be759
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
@@ -141,7 +141,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2Y
 }
 
 ###
-// delete project
+// delete scene
 DELETE http://localhost:4000/api/scene/63c7efd5a2e6a30a4aae4aa6
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+
+###
+PATCH http://localhost:4000/api/scene/upload/video/63cbbe49d136131e1b64e236
+Content-Type: multipart/form-data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+
+{
+  "video": "file" // video/mp4
+}
+
+###
+PATCH http://localhost:4000/api/scene/upload/image/63cbbe49d136131e1b64e236
+Content-Type: multipart/form-data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYzdlNTc2YWNmOGI0YWFiZmVlNGE4OCIsInVzZXJuYW1lIjoiYW1pcmhvc2Vpbmg3MyIsImlhdCI6MTY3NDA0NDc5NiwiZXhwIjoxNjc0MTMxMTk2fQ._EU1kjw8ZXt_8N4IUreuhd2wsM6cFVOBBnCR4aUTYcw
+
+{
+  "image": "file" // image/jpg, image/jpeg, image/png, image/gif
+}

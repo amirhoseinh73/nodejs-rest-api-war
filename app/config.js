@@ -3,7 +3,6 @@ import express from "express"
 import { fileURLToPath } from 'url'
 import path from "path"
 import bodyParser from "body-parser"
-import multer from "multer";
 import User from "./models/userModel.js"
 import Project from "./models/projectModel.js"
 import Scene from "./models/sceneModel.js"
@@ -46,4 +45,5 @@ export const __dir_videos__ = `${__dirname__}/../uploads/videos`
 
 export {User, Project, Scene}
 
-export const AVAILABLE_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/gif"]
+export const AVAILABLE_IMAGE_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/gif"]
+export const AVAILABLE_VIDEO_FORMATS = ["video/mp4"]
