@@ -26,6 +26,10 @@ const sceneSchema = new mongoose.Schema({
     type: Schema.Types.Array,
     required: false
   },
+  models: {
+    type: Schema.Types.Array,
+    required: false
+  },
   upload_size: {
     type: Schema.Types.Number, // size in KB
     required: false

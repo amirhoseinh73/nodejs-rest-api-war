@@ -58,7 +58,7 @@ export const writeSceneData = async (sceneID, data) => {
   }
 }
 
-export const removeProjectDIR = async (pathName) => {
+export const removeDIR = async (pathName) => {
   try {
     fs.rmSync(pathName, {
       recursive: true,

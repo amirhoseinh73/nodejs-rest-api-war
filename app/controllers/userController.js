@@ -4,7 +4,7 @@ import { respSC } from "../helpers/response.js"
 import jwt from "jsonwebtoken"
 import { jwt_blacklist, JWT_SECRET } from "../config.js"
 import { HandledRespError, resErrCatch } from "../helpers/errorThrow.js"
-import { User } from "../config.js"
+import { User } from "../models/parentModel.js"
 
 const userController = {
   register: async function( req, res ) {

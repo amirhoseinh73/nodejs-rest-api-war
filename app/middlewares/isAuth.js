@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 import { JWT_SECRET, jwt_blacklist } from "../config.js"
-import { User } from "../config.js"
+import { User } from "../models/parentModel.js"
 import { HandledRespError, resErrCatch } from "../helpers/errorThrow.js"
 import { Messages } from "../helpers/messages.js"
 

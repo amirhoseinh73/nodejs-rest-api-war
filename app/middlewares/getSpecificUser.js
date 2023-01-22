@@ -1,6 +1,6 @@
 import { HandledRespError, resErrCatch } from "../helpers/errorThrow.js"
 import { Messages } from "../helpers/messages.js"
-import { User } from "../config.js"
+import { User } from "../models/parentModel.js"
 
 const getSpecificUserByID = async ( req, res, next ) => {
   try {

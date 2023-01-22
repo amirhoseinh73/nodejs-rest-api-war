@@ -2,7 +2,7 @@ import { Messages } from "../helpers/messages.js"
 import { respSC } from "../helpers/response.js";
 import { readProjectData, removeProjectData, writeProjectData } from "../helpers/fileHelper.js"
 import { HandledRespError, resErrCatch } from "../helpers/errorThrow.js";
-import { Project } from "../config.js";
+import { Project } from "../models/parentModel.js"
 
 const projectController = {
   readAllProjects: async ( req, res ) => {
