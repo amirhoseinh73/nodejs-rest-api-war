@@ -21,7 +21,9 @@ class sceneController {
       if ( ! allScenes ) throw new HandledRespError(404, Messages.noData)
 
       await Promise.all( allScenes.map( async sceneInfo => {
-        return sceneInfo.data = await this._readSceneDataFromFile(sceneInfo._id)
+        sceneInfo = this._handleUploadedFilesURL(sceneInfo)
+        sceneInfo.data = await this._readSceneDataFromFile(sceneInfo._id)
+        return sceneInfo
       } ))
 
       return res.status(200).json(respSC(allScenes))
@@ -258,7 +260,7 @@ class sceneController {
       sceneInfo.upload_size = newUploadedSize
 
       const fileCurrentName = String(file.filename).split(".")[0]
-      sceneInfo.models.push(`${fileCurrentName}/scene.gltf`)
+      sceneInfo.models.push(`${fileCurrentName}/scene.gltf`) // here I put /scene.gltf because other models are available and they are in models directory
 
       const currentZip = new AdmZip(`${__dir_zips__}/${file.filename}`);
       currentZip.extractAllTo(`${__dir_models__}/${fileCurrentName}`, true);
