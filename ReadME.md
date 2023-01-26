@@ -21,8 +21,12 @@ project and scene data is a json that save into a file and file name store in DB
 
 ## Run
 
-> just replace your mongodb link to .env with my link
+> create .env file in ptoject root and simply add these 3 params:
+1. APP_PORT=3000
+2. DB_URL="mongodb+srv://user:pass@cluster0.m4kxb2i.mongodb.net/?retryWrites=true&w=majority"
+3. APP_URL="http://localhost:3000" -> this is for public urls of uploaded files
 
+> open terminal and run
 ```
 npm run dev
 ```
